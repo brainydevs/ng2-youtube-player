@@ -13,6 +13,7 @@ export class YoutubePlayer implements AfterContentInit {
 	@Input() videoId: string = '';
 	@Input() height: number;
 	@Input() width: number;
+	@Input() playerVars: YT.PlayerVars;
 
 	// player created and initialized - sends instance of the player
 	@Output() ready = new EventEmitter<YT.Player>();
@@ -35,6 +36,6 @@ export class YoutubePlayer implements AfterContentInit {
 		this.playerService.setupPlayer(htmlId, {
 			ready: this.ready,
 			change: this.change
-		}, playerSize, this.videoId);
+		}, playerSize, this.videoId, this.playerVars);
 	}
 }
