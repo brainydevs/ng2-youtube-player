@@ -23,7 +23,7 @@ System.registerDynamic('src/youtube-player.component', ['@angular/core', './yout
             this.playerService.setupPlayer(htmlId, {
                 ready: this.ready,
                 change: this.change
-            }, playerSize, this.videoId);
+            }, playerSize, this.videoId, this.playerVars);
         };
         YoutubePlayer.decorators = [{ type: core_1.Component, args: [{
                 selector: 'youtube-player',
@@ -38,6 +38,7 @@ System.registerDynamic('src/youtube-player.component', ['@angular/core', './yout
             'videoId': [{ type: core_1.Input }],
             'height': [{ type: core_1.Input }],
             'width': [{ type: core_1.Input }],
+            'playerVars': [{ type: core_1.Input }],
             'ready': [{ type: core_1.Output }],
             'change': [{ type: core_1.Output }],
             'ytPlayerContainer': [{ type: core_1.ViewChild, args: ['ytPlayerContainer'] }]
@@ -99,11 +100,11 @@ System.registerDynamic('src/youtube-player.service', ['@angular/core', 'rxjs/Rep
             playerApiScript.src = "http://www.youtube.com/iframe_api";
             doc.body.appendChild(playerApiScript);
         };
-        YoutubePlayerService.prototype.setupPlayer = function (elementId, outputs, sizes, videoId) {
+        YoutubePlayerService.prototype.setupPlayer = function (elementId, outputs, sizes, videoId, playerVars) {
             var _this = this;
             var createPlayer = function () {
                 if (YoutubePlayerService.Player) {
-                    _this.createPlayer(elementId, outputs, sizes, videoId);
+                    _this.createPlayer(elementId, outputs, sizes, videoId, playerVars);
                 }
             };
             this.api.subscribe(createPlayer);
@@ -126,7 +127,7 @@ System.registerDynamic('src/youtube-player.service', ['@angular/core', 'rxjs/Rep
             var isPlayerPlaying = isPlayerReady ? playerState !== YT.PlayerState.ENDED && playerState !== YT.PlayerState.PAUSED : false;
             return isPlayerPlaying;
         };
-        YoutubePlayerService.prototype.createPlayer = function (elementId, outputs, sizes, videoId) {
+        YoutubePlayerService.prototype.createPlayer = function (elementId, outputs, sizes, videoId, playerVars) {
             var _this = this;
             var service = this;
             var playerSize = {
@@ -135,7 +136,7 @@ System.registerDynamic('src/youtube-player.service', ['@angular/core', 'rxjs/Rep
             };
             return new YoutubePlayerService.Player(elementId, Object.assign({}, playerSize, {
                 videoId: videoId || '',
-                // playerVars: playerVars,
+                playerVars: playerVars,
                 events: {
                     onReady: function (ev) {
                         _this.zone.run(function () {
